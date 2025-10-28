@@ -20,10 +20,9 @@ import {
 } from "@/store/features/wallet/walletsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { generateWallets } from "@/utils/generateWallets";
-import { IconHourglassEmpty, IconMoodEmpty } from "@tabler/icons-react";
+import { IconHourglassEmpty } from "@tabler/icons-react";
 import {
   CopyIcon,
-  DeleteIcon,
   MoonIcon,
   PlusCircle,
   SettingsIcon,
@@ -79,7 +78,11 @@ const HomeScreen = () => {
               <Button
                 className="w-full"
                 onClick={() => {
-                  const accountNumber = Object.keys(wallets).length;
+                  const accountNumber =
+                    Object.keys(wallets).length === 0
+                      ? 0
+                      : Number(Object.keys(wallets).at(-1)?.split("-").at(-1)) +
+                        1;
                   const { ethereumWallet, solanaWallet } = generateWallets(
                     accountNumber,
                     seed
@@ -257,12 +260,11 @@ const HomeScreen = () => {
                     <Button
                       className="mt-4"
                       onClick={() => {
-                        const accountNumber = Object.keys(wallets).length;
                         const { ethereumWallet, solanaWallet } =
-                          generateWallets(accountNumber, seed);
+                          generateWallets(0, seed);
                         dispatch(
                           addWallets({
-                            accountName: `account-${accountNumber}`,
+                            accountName: `account-${0}`,
                             wallets: [ethereumWallet, solanaWallet],
                           })
                         );
